@@ -48,7 +48,8 @@ public class ObjectLightmapViewer : EditorWindow
     private Material m_cMaterial = null;
     private Material m_cWireMaterial = null;
     private Mesh m_cFullQuadMesh = null;
-    public Vector2 m_vPreviewDir = new Vector2(-120, 20);
+    private Vector2 m_vPreviewDir = new Vector2(-120, 20);
+    private float m_fPreviewSize = 0.0f;
 
     // Get reflection things.
     private MethodInfo m_miPrResizeHandle = null;
@@ -113,6 +114,7 @@ public class ObjectLightmapViewer : EditorWindow
         Rect rcWindowArea = position;
         if (ProcessLightmapArea(false, out rcUVArea, out rcWindowArea))
         {
+            rcWindowArea.yMax -= m_fPreviewSize;
             if ((rcUVArea.yMax < rcWindowArea.y) || (rcUVArea.y > rcWindowArea.yMax))
             {
                 m_vScrollPosition.y = rcUVArea.y - 1.0f;
@@ -651,10 +653,10 @@ public class ObjectLightmapViewer : EditorWindow
         }
 
         // Get preview size.
-        float fPreviewSize = (float)m_miPrResizeHandle.Invoke(m_cPreviewResizerInstance, new object[] { position, 100, 250, 17 });
-        //Rect rcPreviewRect = new Rect(0.0f, position.height - fPreviewSize, position.width, fPreviewSize);
+        m_fPreviewSize = (float)m_miPrResizeHandle.Invoke(m_cPreviewResizerInstance, new object[] { position, 100, 250, 17 });
+        //Rect rcPreviewRect = new Rect(0.0f, position.height - m_fPreviewSize, position.width, m_fPreviewSize);
 
-        if (fPreviewSize <= 0.0f)
+        if (m_fPreviewSize <= 0.0f)
         {
             return;
         }
@@ -670,7 +672,7 @@ public class ObjectLightmapViewer : EditorWindow
         GUILayoutOption[] aLdAreaOptions = new GUILayoutOption[] { GUILayout.MaxWidth(fLightmapSize), GUILayout.MaxHeight(fLightmapSize) };
 
         // Draw object uv area in lightmap.
-        m_vScrollLightmap = EditorGUILayout.BeginScrollView(m_vScrollLightmap, GUILayout.Height(fPreviewSize));
+        m_vScrollLightmap = EditorGUILayout.BeginScrollView(m_vScrollLightmap, GUILayout.Height(m_fPreviewSize));
         {
             // Draw label uv info.
             Vector4 vObjectLmArea = cRenderer.lightmapScaleOffset;
