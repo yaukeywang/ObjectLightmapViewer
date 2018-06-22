@@ -6,7 +6,7 @@ Viewer of unity mesh renderer uv in baked lightmap.
 
 ## How to use
 * Open a baked lightmap scene.
-* Open this viewr at "Tools/Object Lightmap Viewer".
+* Open this viewer at "Tools/Object Lightmap Viewer".
 * Select a baked object to preview it's lightmap uv information in this viewer.
 
 ## Screenshot
